@@ -22,32 +22,32 @@ resource "aws_internet_gateway" "my_igw" {
   vpc_id = aws_vpc.my_vpc.id
 }
 
-resource "aws_instance" "my_instance1.1" {
+resource "aws_instance" "my_instance11" {
   ami           = "ami-04a81a99f5ec58529"
   instance_type = "t2.micro"
   key_name      = "NNnn"
   subnet_id     = aws_subnet.my_subnet.id
   tags = {
-    Name = "my-instance-1"
+    Name = "my-instance-11"
   }
 }
 
-resource "aws_instance" "my_instance1.2" {
+resource "aws_instance" "my_instance12" {
   ami           = "ami-04a81a99f5ec58529"
   instance_type = "t2.medium"
   key_name      = "NNnn"
   subnet_id     = aws_subnet.my_subnet.id
   tags = {
-    Name = "my-instance-2"
+    Name = "my-instance-12"
   }
 }
 
-resource "aws_instance" "my_instance1.3" {
+resource "aws_instance" "my_instance13" {
   ami           = "ami-04a81a99f5ec58529"
   instance_type = "t3.medium"
   key_name      = "NNnn"
   subnet_id     = aws_subnet.my_subnet.id
   tags = {
-    Name = "my-instance-3"
+    Name = "my-instance-13"
   }
 }
