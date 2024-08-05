@@ -1,31 +1,34 @@
 provider "aws" {
-  region = "us-east-1"
+  region     = "us-east-1"
 }
-resource "aws_instance" "jenkins" {
+
+resource "aws_instance" "Terraform-Ansible-Master" {
     ami = "ami-04a81a99f5ec58529"
     instance_type = "t2.micro"
     key_name = "NNnn"
-    vpc_security_group_ids = [aws_security_group.Terraform SS.id]
+    vpc_security_group_ids = [aws_security_group.Terraform-Ansible-SG.id]
     tags = {
-        Name = "Jenkins"
+        Name = "Terraform-Ansible-Master"
     }
 }
-resource "aws_instance" "nexus" {
+
+resource "aws_instance" "Terraform-jenkins-nexus" {
   ami           = "ami-04a81a99f5ec58529"  # Replace with your AMI ID
   instance_type = "t2.medium"
   key_name      = "NNnn"
-  vpc_security_group_ids = [aws_security_group.Terraform.id]
+  vpc_security_group_ids = [aws_security_group.Terraform-jenkins.id]
   root_block_device {
     volume_size = 20
     volume_type = "gp3"
   }
 
   tags = {
-    Name = "Terraform-nexus"
+    Name = "Terraform-jenkins-nexus"
   }
+
 }
 
-resource "aws_instance" "Kuberneteves" {
+resource "aws_instance" "Terraform-prometheus-grafana" {
   ami           = "ami-04a81a99f5ec58529"  # Replace with your AMI ID
   instance_type = "t3.medium"
   key_name      = "NNnn"
@@ -36,15 +39,13 @@ resource "aws_instance" "Kuberneteves" {
   }
 
   tags = {
-    Name = "Kuberneteves"
+    Name = "Terraform-prometheus-grafana"
   }
 
 }
 
-
-
-resource "aws_security_group" "Terraform SS" {
-  name        = "Terraform SS"
+resource "aws_security_group" "Terraform-Ansible-SG" {
+  name        = "Terraform-Ansible-SG"
   description = "Web Security Group for HTTP"
 
   ingress {
@@ -62,12 +63,12 @@ resource "aws_security_group" "Terraform SS" {
   }
 
   tags = {
-    Name = "Terraform SS"
+    Name = "Terraform-Ansible-SG"
   }
 }
 
-resource "aws_security_group" "Terraform" {
-  name        = "Terraform"
+resource "aws_security_group" "Terraform-jenkins" {
+  name        = "Terraform-jenkins"
   description = "Jenkins and security group"
 
   ingress {
