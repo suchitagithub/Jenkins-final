@@ -5,7 +5,7 @@ resource "aws_instance" "jenkins" {
     ami = "ami-04a81a99f5ec58529"
     instance_type = "t2.micro"
     key_name = "NNnn"
-    vpc_security_group_ids = [aws_security_group.Terraform-Ansible-SG.id]
+    vpc_security_group_ids = [aws_security_group.Terraform SS.id]
     tags = {
         Name = "Jenkins"
     }
@@ -14,7 +14,7 @@ resource "aws_instance" "nexus" {
   ami           = "ami-04a81a99f5ec58529"  # Replace with your AMI ID
   instance_type = "t2.medium"
   key_name      = "NNnn"
-  vpc_security_group_ids = [aws_security_group.Terraform-jenkins.id]
+  vpc_security_group_ids = [aws_security_group.Terraform.id]
   root_block_device {
     volume_size = 20
     volume_type = "gp3"
@@ -43,8 +43,8 @@ resource "aws_instance" "Kuberneteves" {
 
 
 
-resource "aws_security_group" "Terraform-Ansible-SG" {
-  name        = "Terraform-Ansible-SG"
+resource "aws_security_group" "Terraform SS" {
+  name        = "Terraform SS"
   description = "Web Security Group for HTTP"
 
   ingress {
@@ -62,12 +62,12 @@ resource "aws_security_group" "Terraform-Ansible-SG" {
   }
 
   tags = {
-    Name = "Terraform-Ansible-SG"
+    Name = "Terraform SS"
   }
 }
 
-resource "aws_security_group" "Terraform-jenkins" {
-  name        = "Terraform-jenkins"
+resource "aws_security_group" "Terraform" {
+  name        = "Terraform"
   description = "Jenkins and security group"
 
   ingress {
