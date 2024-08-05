@@ -1,56 +1,48 @@
 provider "aws" {
   region = "us-east-1"
 }
-
-resource "aws_vpc" "my_vpc" {
-  cidr_block = "10.0.0.0/16"
-  tags = {
-    Name = "my-vpc"
-  }
+resource "aws_instance" "jenkins" {
+    ami = "ami-04a81a99f5ec58529"
+    instance_type = "t2.micro"
+    key_name = "NNnn"
+    vpc_security_group_ids = [aws_security_group.Terraform-Ansible-SG.id]
+    tags = {
+        Name = "Jenkins"
+    }
 }
-
-resource "aws_subnet" "my_subnet" {
-  vpc_id            = aws_vpc.my_vpc.id
-  cidr_block        = "10.0.1.0/24"
-  availability_zone = "us-east-1a"
-  tags = {
-    Name = "my-subnet"
-  }
-}
-
-resource "aws_internet_gateway" "my_igw" {
-  vpc_id = aws_vpc.my_vpc.id
-}
-
-resource "aws_instance" "my_instance11" {
-  ami           = "ami-04a81a99f5ec58529"
-  instance_type = "t2.micro"
-  key_name      = "NNnn"
-  subnet_id     = aws_subnet.my_subnet.id
-  tags = {
-    Name = "my-instance-11"
-  }
-}
-
-resource "aws_instance" "my_instance12" {
-  ami           = "ami-04a81a99f5ec58529"
+resource "aws_instance" "nexus" {
+  ami           = "ami-04a81a99f5ec58529"  # Replace with your AMI ID
   instance_type = "t2.medium"
   key_name      = "NNnn"
-  subnet_id     = aws_subnet.my_subnet.id
+  vpc_security_group_ids = [aws_security_group.Terraform-jenkins.id]
+  root_block_device {
+    volume_size = 20
+    volume_type = "gp3"
+  }
+
   tags = {
-    Name = "my-instance-12"
+    Name = "Terraform-nexus"
   }
 }
 
-resource "aws_instance" "my_instance13" {
-  ami           = "ami-04a81a99f5ec58529"
+resource "aws_instance" "Kuberneteves" {
+  ami           = "ami-04a81a99f5ec58529"  # Replace with your AMI ID
   instance_type = "t3.medium"
   key_name      = "NNnn"
-  subnet_id     = aws_subnet.my_subnet.id
-  tags = {
-    Name = "my-instance-13"
+  vpc_security_group_ids = [aws_security_group.Terraform-prometheus.id]
+  root_block_device {
+    volume_size = 8
+    volume_type = "gp3"
   }
+
+  tags = {
+    Name = "Kuberneteves"
+  }
+
 }
+
+
+
 resource "aws_security_group" "Terraform-Ansible-SG" {
   name        = "Terraform-Ansible-SG"
   description = "Web Security Group for HTTP"
