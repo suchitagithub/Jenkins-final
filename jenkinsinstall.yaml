@@ -1,0 +1,64 @@
+---
+- name: Install Jenkins
+  hosts: test
+  become: true
+
+  tasks:
+    - name: Update the system
+      apt:
+        upgrade: yes
+        update_cache: yes
+    - name: Install Java 11
+      apt:
+        name: openjdk-11-jdk
+        state: present
+    - name: Download Jenkins GPG key
+      apt_key:
+        url: https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+        state: present
+    - name: Add Jenkins repository
+      apt_repository:
+        repo: 'deb https://pkg.jenkins.io/debian-stable binary/'
+        state: present
+    - name: Install Jenkins
+      apt:
+        name: jenkins
+        state: present
+    - name: Start the Jenkins
+      service:
+        name: jenkins
+        state: started
+    - name: enable the jenkins
+      service: 
+        name: jenkins
+        enabled: yes
+
+    - name: Allocate more memory for jenkins java
+      lineinfile:
+        path: /etc/default/jenkins
+        regexp: '^JAVA_ARGS=.*'
+        line: 'JAVA_ARGS="-Djava.awt.headless=true -Xms512m -Xmx2048m"'
+        state: present
+
+    - name: Install firewalld
+      apt:
+        name: firewalld
+        state: present
+
+    - name: Ensure firewalld is running and enabled
+      service:
+        name: firewalld
+        state: started
+        enabled: yes
+
+    - name: Open port 8080 for Jenkins
+      firewalld:
+        port: 8080/tcp
+        permanent: yes
+        state: enabled
+        immediate: yes
+
+    - name: Reload firewalld to apply changes
+      command:
+        cmd: firewall-cmd --reload
+ 
