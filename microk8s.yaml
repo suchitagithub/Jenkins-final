@@ -1,0 +1,38 @@
+---
+- name: Install MicroK8s on Ubuntu
+  hosts: microk8s_server
+  become: true
+
+  tasks:
+    - name: Update the system
+      apt:
+        update_cache: yes
+        upgrade: yes
+
+    - name: Install snapd (if not already installed)
+      apt:
+        name: snapd
+        state: present
+
+    - name: Install MicroK8s
+      snap:
+        name: microk8s
+        state: present
+        classic: yes
+
+    - name: Ensure MicroK8s services are enabled
+      command: microk8s enable dns storage
+
+    - name: Open required ports for MicroK8s
+      firewalld:
+        port: "{{ item }}"
+        state: enabled
+        permanent: yes
+        immediate: yes
+      loop:
+        - 16443/tcp  # Kubernetes API server
+        - 80/tcp     # HTTP
+        - 443/tcp    # HTTPS
+
+    - name: Reload firewalld to apply changes
+      command: firewall-cmd --reload
