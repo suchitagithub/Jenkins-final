@@ -15,7 +15,7 @@ variable "subnet_cidr" {
 
 variable "ami_id" {
   description = "AMI ID for instances"
-  default     = "ami-0497a974f8d5dcef8"
+  default     = "ami-0a0e5d9c7acc336f1"
 }
 
 variable "availability_zone" {
