@@ -157,7 +157,7 @@ resource "aws_security_group" "microk8s_sg" {
   }
 }
 
-resource "aws_instance" "jenkins_instance" {
+resource "aws_instance" "jenkins" {
   ami                      = var.ami_id
   instance_type            = "t2.medium"
   availability_zone        = var.availability_zone
@@ -171,7 +171,7 @@ resource "aws_instance" "jenkins_instance" {
   }
 }
 
-resource "aws_instance" "nexus_instance" {
+resource "aws_instance" "nexus" {
   ami                      = var.ami_id
   instance_type            = "t2.medium"
   availability_zone        = var.availability_zone
@@ -185,7 +185,7 @@ resource "aws_instance" "nexus_instance" {
   }
 }
 
-resource "aws_instance" "microk8s_instance" {
+resource "aws_instance" "kubernete" {
   ami                      = var.ami_id
   instance_type            = "t3.medium"
   availability_zone        = var.availability_zone
