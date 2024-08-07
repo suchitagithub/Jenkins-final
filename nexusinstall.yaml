@@ -1,6 +1,6 @@
 ---
 - name: Install Nexus Repository Manager
-  hosts: test
+  hosts: nexus_server
   become: true  # To escalate privileges for tasks that require root access
 
   vars:
