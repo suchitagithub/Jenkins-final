@@ -1,6 +1,6 @@
 ---
 - name: Install Jenkins
-  hosts: nexus_server
+  hosts: jenkins_server
   become: true
 
   tasks:
