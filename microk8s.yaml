@@ -1,0 +1,58 @@
+---
+- name: Install and configure MicroK8s
+  hosts: all
+  become: yes
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install snapd
+      apt:
+        name: snapd
+        state: present
+
+    - name: Ensure snapd is started and enabled
+      service:
+        name: snapd
+        state: started
+        enabled: yes
+
+    - name: Install MicroK8s
+      snap:
+        name: microk8s
+        state: present
+
+    - name: Wait for MicroK8s to be fully installed
+      command: sleep 60
+      # Adjust the sleep time if necessary, or use a more sophisticated check
+
+    - name: Ensure MicroK8s is started
+      command: microk8s status --wait-ready
+      register: microk8s_status
+      until: microk8s_status.rc == 0
+      retries: 10
+      delay: 30
+
+    - name: Add current user to MicroK8s group
+      user:
+        name: "{{ ansible_user }}"
+        groups: microk8s
+        append: yes
+
+    - name: Ensure kubectl alias is set
+      lineinfile:
+        path: ~/.bashrc
+        line: 'alias kubectl="microk8s kubectl"'
+        create: yes
+
+    - name: Apply basic MicroK8s add-ons
+      command: microk8s enable dns storage
+      # You can enable other add-ons as needed
+
+    - name: Install common packages for kubectl usage
+      apt:
+        name:
+          - curl
+          - vim
+        state: present
